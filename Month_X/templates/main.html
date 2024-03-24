@@ -1,0 +1,66 @@
+{%extends "base.html"%}
+
+{%block content%}
+<form action="" method="POST">
+    {%csrf_token%}
+
+    <div class="container mt-5" style="width:660px">
+    <div class="input-group mb-3">
+        {{ context.form.as_p }}
+        <button type="submit" class="input-group-text" for="inputGroupFile02" >Upload</button>
+    </div>
+    </div>
+</form>
+
+    <div class="container">
+       <script>
+  window.onload = function () {
+    var data = {{ DATA|safe }};
+    var btcUSDDps = [];
+
+    for(var i=0; i<data.length; i++) {
+      var dataDate = data[i].date;
+      btcUSDDps.push({
+        x: new Date(parseInt(dataDate.split("-")[0]),parseInt(dataDate.split("-")[1]),parseInt(dataDate.split("-")[2])),
+        y: [ data[i].open, data[i].high, data[i].low, data[i].close ],
+        color: data[i].open < data[i].close ? "#77A034" : "#C0504E"
+      });
+    }
+
+    var chart = new CanvasJS.Chart("chartContainer", {
+      theme: "light2",
+      exportEnabled: true,
+      zoomEnabled: true,
+      title: {
+        text: "BTC/USD"
+      },
+      axisX: {
+        crosshair: {
+          enabled: true,
+          snapToDataPoint: true,
+          valueFormatString: "MMM DD, YYYY"
+        }
+      },
+      axisY: {
+        prefix: "$",
+        title: "Price",
+        crosshair: {
+          enabled: true,
+          snapToDataPoint: true,
+          valueFormatString: "$#,##0.00"
+        }
+      },
+      data: [{
+        type: "candlestick",
+        yValueFormatString: "$#,##0.00",
+        xValueFormatString: "MMM DD, YYYY",
+        risingColor: "#77A034",
+        fallingColor: "#C0504E",
+        dataPoints: btcUSDDps
+      }]
+    });
+    chart.render();
+  }
+</script>
+    </div>
+{%endblock%}
