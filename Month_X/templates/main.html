@@ -3,64 +3,72 @@
 {%block content%}
 <form action="" method="POST">
     {%csrf_token%}
-
-    <div class="container mt-5" style="width:660px">
+    <div class="container mt-5 load_data" style="width:660px">
     <div class="input-group mb-3">
         {{ context.form.as_p }}
-        <button type="submit" class="input-group-text" for="inputGroupFile02" >Upload</button>
     </div>
+        <button type="submit" class="load_data_button" for="inputGroupFile02" >Upload</button>
     </div>
 </form>
+<div class="container">
+    <div class="alert alert-info text-center fs-2" role="alert">
+         <p>Average Price : {{average_price}}</p>
+    </div>
+</div>
 
+
+
+
+
+<div class="container">
+    <table class="table text-center">
+  <thead>
+    <tr>
+      <th scope="col">Max</th>
+      <th scope="col">Min</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>{{min_price}}</td>
+      <td>{{maximum_price}}</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+    {{DATA|safe}}
     <div class="container">
-       <script>
-  window.onload = function () {
-    var data = {{ DATA|safe }};
-    var btcUSDDps = [];
+        {{min}}
+    </div>
+<div class="recomendation">
 
-    for(var i=0; i<data.length; i++) {
-      var dataDate = data[i].date;
-      btcUSDDps.push({
-        x: new Date(parseInt(dataDate.split("-")[0]),parseInt(dataDate.split("-")[1]),parseInt(dataDate.split("-")[2])),
-        y: [ data[i].open, data[i].high, data[i].low, data[i].close ],
-        color: data[i].open < data[i].close ? "#77A034" : "#C0504E"
-      });
-    }
-
-    var chart = new CanvasJS.Chart("chartContainer", {
-      theme: "light2",
-      exportEnabled: true,
-      zoomEnabled: true,
-      title: {
-        text: "BTC/USD"
-      },
-      axisX: {
-        crosshair: {
-          enabled: true,
-          snapToDataPoint: true,
-          valueFormatString: "MMM DD, YYYY"
-        }
-      },
-      axisY: {
-        prefix: "$",
-        title: "Price",
-        crosshair: {
-          enabled: true,
-          snapToDataPoint: true,
-          valueFormatString: "$#,##0.00"
-        }
-      },
-      data: [{
-        type: "candlestick",
-        yValueFormatString: "$#,##0.00",
-        xValueFormatString: "MMM DD, YYYY",
-        risingColor: "#77A034",
-        fallingColor: "#C0504E",
-        dataPoints: btcUSDDps
-      }]
-    });
-    chart.render();
-  }
-</script>
+<div class="container">
+    <h4>Best Month for Buy</h4>
+        <ol class="list-group list-group-numbered">
+        {%for item in sorted_data_low%}
+        <li class="list-group-item d-flex justify-content-between align-items-start">
+            <div class="ms-2 me-auto">
+            <div class="fw-bold">{{item.0}}</div>
+            {{item.1}}
+            </div>
+        <span class="badge text-bg-primary rounded-pill">{{ forloop.counter }}</span>
+        </li>
+        {%endfor%}
+        </ol>
+    </div>
+<div class="container">
+    <h4>Best Month for Sold</h4>
+    <ol class="list-group list-group-numbered">
+    {%for item in sorted_data_hight%}
+        <li class="list-group-item d-flex justify-content-between align-items-start">
+            <div class="ms-2 me-auto">
+            <div class="fw-bold">{{item.0}}</div>
+            {{item.1}}
+            </div>
+            <span class="badge text-bg-primary rounded-pill">{{ forloop.counter }}</span>
+        </li>
+        {%endfor%}
+    </ol>
+    </div>
     </div>
 {%endblock%}

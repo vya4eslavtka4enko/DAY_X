@@ -1,0 +1,16 @@
+.input-group select{
+    height:50px;
+}
+.load_data{
+    display:flex;
+    justify-content:center;
+    flex:100px;
+}
+.load_data_button{
+    height:50px;
+    border-radius:10px;
+}
+.recomendation{
+    display:flex;
+}
+
