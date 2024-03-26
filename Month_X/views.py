@@ -76,7 +76,8 @@ def best_month(low_values,data_values):
     sorted_combined = sorted(combined_lists, key=lambda x: x[0])
     return sorted_combined[:3],sorted_combined[-3:]
 
-
+def get_current_price():
+    pass
 
 
 
